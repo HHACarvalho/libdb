@@ -10,9 +10,9 @@ docker stop libdb-sqlserver && docker rm libdb-sqlserver
 docker run -d -p 1401:1433 --network libdb-network --name libdb-sqlserver -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=Docker@1!" mcr.microsoft.com/mssql/server:2022-latest
 
 # Publish the .NET back-end application
-cd libdb-dotnet
+cd libdb-dotnet/
 ./publish.sh
 
 # Publish the Svelte front-end application
-cd ../libdb-svelte
+cd ../libdb-svelte/
 ./publish.sh
