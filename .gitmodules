@@ -1,0 +1,6 @@
+[submodule "libdb-dotnet"]
+	path = libdb-dotnet
+	url = https://github.com/HHACarvalho/libdb-dotnet
+[submodule "libdb-svelte"]
+	path = libdb-svelte
+	url = https://github.com/HHACarvalho/libdb-svelte
