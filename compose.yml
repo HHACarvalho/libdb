@@ -1,0 +1,48 @@
+services:
+  # SQL Server database
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver
+    ports:
+      - '1401:1433'
+    networks:
+      - libdb-network
+    environment:
+      ACCEPT_EULA: 'Y'
+      SA_PASSWORD: ${SA_PASSWORD}
+
+  # .NET back-end
+  dotnet:
+    build:
+      context: ./libdb-dotnet
+      dockerfile: Dockerfile
+    image: libdb-dotnet:latest
+    container_name: dotnet
+    ports:
+      - '5000:8080'
+    networks:
+      - libdb-network
+    depends_on:
+      - sqlserver
+    environment:
+      ENVIRONMENT: PRODUCTION
+
+  # Svelte front-end
+  svelte:
+    build:
+      context: ./libdb-svelte
+      dockerfile: Dockerfile
+    image: libdb-svelte:latest
+    container_name: svelte
+    ports:
+      - '3000:3000'
+    networks:
+      - libdb-network
+    depends_on:
+      - dotnet
+    environment:
+      ENVIRONMENT: PRODUCTION
+
+networks:
+  libdb-network:
+    driver: bridge
