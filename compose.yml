@@ -4,7 +4,7 @@ services:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: sqlserver
     ports:
-      - '1401:1433'
+      - '1433:1433'
     networks:
       - libdb-network
     environment:
@@ -19,7 +19,7 @@ services:
     image: libdb-dotnet:latest
     container_name: dotnet
     ports:
-      - '5000:8080'
+      - '8080:8080'
     networks:
       - libdb-network
     depends_on:
