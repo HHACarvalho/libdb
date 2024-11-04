@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Load the environment variables
-source .env
-
 # Stop and remove any containers
 docker-compose down
 
