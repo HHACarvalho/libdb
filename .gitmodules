@@ -4,3 +4,6 @@
 [submodule "libdb-svelte"]
 	path = libdb-svelte
 	url = https://github.com/HHACarvalho/libdb-svelte
+[submodule "libdb-nodejs"]
+	path = libdb-nodejs
+	url = https://github.com/HHACarvalho/libdb-nodejs
