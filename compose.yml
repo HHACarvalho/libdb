@@ -9,7 +9,18 @@ services:
       - libdb-network
     environment:
       ACCEPT_EULA: 'Y'
-      SA_PASSWORD: ${SA_PASSWORD}
+
+  # MongoDB database
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - '27017:27017'
+    networks:
+      - libdb-network
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_ROOT_PASSWORD}
 
   # .NET back-end
   dotnet:
