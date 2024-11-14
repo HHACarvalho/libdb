@@ -9,6 +9,7 @@ services:
       - libdb-network
     environment:
       ACCEPT_EULA: 'Y'
+      SA_PASSWORD: ${SQLSERVER_SA_PASSWORD}
 
   # MongoDB database
   mongodb:
