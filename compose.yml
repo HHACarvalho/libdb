@@ -6,7 +6,7 @@ services:
     ports:
       - '1433:1433'
     networks:
-      - libdb-network
+      - libdb_network
     environment:
       ACCEPT_EULA: 'Y'
       SA_PASSWORD: ${SQLSERVER_SA_PASSWORD}
@@ -18,7 +18,7 @@ services:
     ports:
       - '27017:27017'
     networks:
-      - libdb-network
+      - libdb_network
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGODB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_ROOT_PASSWORD}
@@ -28,14 +28,30 @@ services:
     build:
       context: ./libdb-dotnet
       dockerfile: Dockerfile
-    image: libdb-dotnet:latest
+    image: libdb_dotnet:latest
     container_name: dotnet
     ports:
       - '8080:8080'
     networks:
-      - libdb-network
+      - libdb_network
     depends_on:
       - sqlserver
+    environment:
+      ENVIRONMENT: PRODUCTION
+
+    # Node.js back-end
+  nodejs:
+    build:
+      context: ./libdb-nodejs
+      dockerfile: Dockerfile
+    image: libdb_nodejs:latest
+    container_name: nodejs
+    ports:
+      - '5000:5000'
+    networks:
+      - libdb_network
+    depends_on:
+      - mongodb
     environment:
       ENVIRONMENT: PRODUCTION
 
@@ -44,17 +60,18 @@ services:
     build:
       context: ./libdb-svelte
       dockerfile: Dockerfile
-    image: libdb-svelte:latest
+    image: libdb_svelte:latest
     container_name: svelte
     ports:
       - '3000:3000'
     networks:
-      - libdb-network
+      - libdb_network
     depends_on:
       - dotnet
+      - nodejs
     environment:
       ENVIRONMENT: PRODUCTION
 
 networks:
-  libdb-network:
+  libdb_network:
     driver: bridge
