@@ -26,7 +26,7 @@ services:
   # .NET back-end
   dotnet:
     build:
-      context: ./libdb-dotnet
+      context: ./libdb-dotnet/
       dockerfile: Dockerfile
     image: libdb_dotnet:latest
     container_name: dotnet
@@ -42,7 +42,7 @@ services:
     # Node.js back-end
   nodejs:
     build:
-      context: ./libdb-nodejs
+      context: ./libdb-nodejs/
       dockerfile: Dockerfile
     image: libdb_nodejs:latest
     container_name: nodejs
@@ -58,7 +58,7 @@ services:
   # Svelte front-end
   svelte:
     build:
-      context: ./libdb-svelte
+      context: ./libdb-svelte/
       dockerfile: Dockerfile
     image: libdb_svelte:latest
     container_name: svelte
@@ -71,6 +71,22 @@ services:
       - nodejs
     environment:
       ENVIRONMENT: PRODUCTION
+
+  # Bootstrap
+  bootstrap:
+    build:
+      context: ./bootstrap/
+      dockerfile: Dockerfile
+    image: libdb_bootstrap:latest
+    container_name: bootstrap
+    networks:
+      - libdb_network
+    depends_on:
+      - dotnet
+      - nodejs
+    environment:
+      DOTNET_URI: http://dotnet:8080/
+      NODEJS_URI: http://nodejs:5000/
 
 networks:
   libdb_network:
