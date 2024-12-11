@@ -78,6 +78,12 @@ services:
         condition: service_healthy
     environment:
       ENVIRONMENT: PRODUCTION
+    healthcheck:
+      test: wget -qO- http://localhost:5000/health
+      start_period: 3s
+      interval: 2s
+      timeout: 2s
+      retries: 5
 
   # Svelte front-end
   svelte:
@@ -91,8 +97,10 @@ services:
     networks:
       - libdb_network
     depends_on:
-      - dotnet
-      - nodejs
+      dotnet:
+        condition: service_healthy
+      nodejs:
+        condition: service_healthy
     environment:
       ENVIRONMENT: PRODUCTION
 
