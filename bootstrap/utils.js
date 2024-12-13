@@ -16,6 +16,17 @@ async function postRequest(url, body) {
 		const data = await req.json();
 		throw new Error('Failed to post: ' + url + ' | ' + data.error);
 	}
+
+	const contentType = req.headers.get('Content-Type') || '';
+	if (contentType.includes('application/json')) {
+		return await req.json();
+	} else {
+		const tokenCookie = req.headers.get('set-cookie');
+		if (tokenCookie) {
+			const token = tokenCookie.match(/token=([^;]+)/)[1];
+			return token;
+		}
+	}
 }
 
 async function putRequest(url, body) {
@@ -38,9 +49,21 @@ async function deleteRequest(url) {
 	}
 }
 
+function decodeToken(token) {
+	// Get the payload
+	const base64Url = token.split('.')[1];
+	// Convert base64url to base64
+	const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+	// Decode the base64 string
+	const decoded = atob(base64);
+	// Parse to JSON object
+	return JSON.parse(decoded);
+}
+
 module.exports = {
 	getRequest,
 	postRequest,
 	putRequest,
-	deleteRequest
+	deleteRequest,
+	decodeToken
 };

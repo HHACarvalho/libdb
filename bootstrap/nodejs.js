@@ -1,4 +1,4 @@
-const { postRequest, putRequest } = require('./utils.js');
+const { postRequest, putRequest, decodeToken } = require('./utils.js');
 
 module.exports = nodejsBootstrap;
 
@@ -27,8 +27,8 @@ async function nodejsBootstrap() {
 	};
 
 	await postRequest(process.env.NODEJS_URI + 'role', role1);
-	await postRequest(process.env.NODEJS_URI + 'role', role2);
-	await postRequest(process.env.NODEJS_URI + 'role', role3);
+	const resRole2 = await postRequest(process.env.NODEJS_URI + 'role', role2);
+	const resRole3 = await postRequest(process.env.NODEJS_URI + 'role', role3);
 
 	///////////
 	// Users //
@@ -65,10 +65,12 @@ async function nodejsBootstrap() {
 		lastName: 'Santos'
 	};
 
-	await postRequest(process.env.NODEJS_URI + 'user/signup', user1);
-	await putRequest(process.env.NODEJS_URI + 'user/role?email=hugo.carvalho@mail.com&role=Admin');
-	await postRequest(process.env.NODEJS_URI + 'user/signup', user2);
-	await putRequest(process.env.NODEJS_URI + 'user/role?email=afonso.esteves@mail.com&role=Mod');
+	const resUser1 = await postRequest(process.env.NODEJS_URI + 'user/signup', user1);
+	const tokenUser1 = decodeToken(resUser1);
+	await putRequest(process.env.NODEJS_URI + 'user/role?userId=' + tokenUser1.id + '&roleId=' + resRole3.id);
+	const resUser2 = await postRequest(process.env.NODEJS_URI + 'user/signup', user2);
+	const tokenUser2 = decodeToken(resUser2);
+	await putRequest(process.env.NODEJS_URI + 'user/role?userId=' + tokenUser2.id + '&roleId=' + resRole2.id);
 	await postRequest(process.env.NODEJS_URI + 'user/signup', user3);
 	await postRequest(process.env.NODEJS_URI + 'user/signup', user4);
 	await postRequest(process.env.NODEJS_URI + 'user/signup', user5);
