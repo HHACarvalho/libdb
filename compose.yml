@@ -12,10 +12,10 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     healthcheck:
       test: pg_isready -U admin -d postgres
-      start_period: 5s
-      interval: 3s
-      timeout: 3s
-      retries: 3
+      start_period: 3s
+      interval: 2s
+      timeout: 2s
+      retries: 5
     volumes:
       - postgres_volume:/var/lib/postgresql/data
 
@@ -32,10 +32,10 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD}
     healthcheck:
       test: echo 'db.runCommand("ping").ok'
-      start_period: 5s
-      interval: 3s
-      timeout: 3s
-      retries: 3
+      start_period: 3s
+      interval: 2s
+      timeout: 2s
+      retries: 5
     volumes:
       - mongodb_volume:/data/db
 
