@@ -103,6 +103,12 @@ services:
         condition: service_healthy
     environment:
       ENVIRONMENT: PRODUCTION
+    healthcheck:
+      test: wget -qO- http://localhost:3000/health
+      start_period: 3s
+      interval: 2s
+      timeout: 2s
+      retries: 5
 
   # Bootstrap
   bootstrap:
@@ -114,7 +120,8 @@ services:
     networks:
       - libdb_network
     depends_on:
-      - svelte
+      svelte:
+        condition: service_healthy
     environment:
       DOTNET_URI: http://dotnet:8080/
       NODEJS_URI: http://nodejs:5000/
